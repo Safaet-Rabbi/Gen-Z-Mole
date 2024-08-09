@@ -1,8 +1,6 @@
 const scoreElement = document.querySelector(".score span");
 const highScoreElement = document.querySelector(".high-score span"); 
 const holes = document.querySelectorAll(".hole");
-const playBtn = document.querySelector(".buttons .play");
-const stopBtn = document.querySelector(".buttons .stop");
 const cursor = document.querySelector(".cursor img");
 
 let gameInterval;
@@ -10,6 +8,7 @@ let points = 0;
 let isGameOver = false;
 let highScore = localStorage.getItem("highScore") || 0; 
 highScoreElement.innerText = highScore;
+
 window.addEventListener("mousemove", (e) => {
     cursor.style.top = e.pageY + "px";
     cursor.style.left = e.pageX + "px";
@@ -22,11 +21,8 @@ window.addEventListener("click", () => {
     }, 100);
 });
 
-playBtn.addEventListener("click", () => {
-    playBtn.style.display = "none";
-    stopBtn.style.display = "inline-block";
+function startGame() {
     isGameOver = false;
-
     points = 0;
     scoreElement.innerText = points;
 
@@ -50,30 +46,26 @@ playBtn.addEventListener("click", () => {
         }, 800);
 
         image.addEventListener("click", () => {
-            clearTimeout(moleTimeout); 
+            clearTimeout(moleTimeout);
 
             if (moleType === 0) {
                 scoreElement.innerText = "GAME OVER: " + points;
                 isGameOver = true;
                 stopGame();
-            } else { 
+            } else {
                 points++;
                 scoreElement.innerText = points;
-                hole.removeChild(image); 
+                hole.removeChild(image);
             }
         });
 
         hole.appendChild(image);
 
     }, 700);
-
-    stopBtn.addEventListener("click", stopGame);
-});
+}
 
 function stopGame() {
     clearInterval(gameInterval);
-    stopBtn.style.display = "none";
-    playBtn.style.display = "inline-block";
     isGameOver = true;
 
     if (points > highScore) {
@@ -88,12 +80,10 @@ function stopGame() {
         }
     });
 
-    setTimeout(resetGame, 2000);
+    setTimeout(() => {
+        location.reload(); // Refresh the page to restart the game
+    }, 2000);
 }
 
-function resetGame() {
-    points = 0;
-    scoreElement.innerText = points;
-    isGameOver = false;
-    playBtn.style.display = "inline-block";
-}
+// Automatically start the game when the page loads
+window.onload = startGame;
