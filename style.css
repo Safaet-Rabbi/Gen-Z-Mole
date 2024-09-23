@@ -46,13 +46,15 @@ body {
 .mole {
   position: absolute;
   z-index: 1;
-  height: 60px;
+  width: 100%; /* Make the image fill the hole */
+  height: 100%; /* Make the image fill the hole */
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
   animation: appear 0.3s linear;
   pointer-events: all;
 }
+
 
 @keyframes appear {
   from {
